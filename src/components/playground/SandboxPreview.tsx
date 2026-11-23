@@ -180,7 +180,7 @@ export function SandboxPreview({
           </div>
         )}
 
-        <TabsContent value="preview" className="m-0">
+        <TabsContent value="preview" keepMounted className="m-0 [&[hidden]]:hidden">
           {compileError ? (
             <div className="flex items-center justify-center p-6 text-xs text-muted-foreground" style={{ height: iframeHeight }}>
               Fix compilation error above to render preview.
@@ -213,11 +213,11 @@ export function SandboxPreview({
                       'rounded border px-2.5 py-1.5 whitespace-pre-wrap break-words',
                       entry.level === 'error'
                         ? 'border-destructive/40 bg-destructive/10 text-destructive'
-                        : entry.level === 'warn'
-                          ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
-                          : entry.level === 'info'
-                            ? 'border-sky-500/30 bg-sky-500/10 text-sky-400'
-                            : 'border-border/60 bg-muted/30 text-foreground',
+                          : entry.level === 'warn'
+                            ? 'border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400'
+                            : entry.level === 'info'
+                              ? 'border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-400'
+                              : 'border-border/60 bg-muted/30 text-foreground',
                     )}
                   >
                     <span className="mr-2 text-[10px] uppercase opacity-60">[{entry.level}]</span>
@@ -242,7 +242,7 @@ export function SandboxPreview({
                     className={cn(
                       'flex items-center justify-between rounded-md border px-3 py-2 text-xs font-medium',
                       passedCount === totalCount
-                        ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400'
+                        ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
                         : 'border-destructive/40 bg-destructive/10 text-destructive',
                     )}
                   >

@@ -215,7 +215,7 @@ export default function TopicPage() {
           {/* Left Pane: Theory / Lab / Quiz / Notes (+ Mobile Live Code tab) */}
           <div className="min-w-0 xl:col-span-6">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-              <TabsList className="w-full flex-wrap justify-start">
+              <TabsList className="h-auto w-full flex-wrap justify-start gap-1">
                 <TabsTrigger value="learn" className="gap-1.5 text-xs">
                   <BookOpen className="size-3.5" />
                   {t(UI_STRINGS.topic.tabs.learn, locale)}

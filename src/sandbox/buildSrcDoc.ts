@@ -41,11 +41,13 @@ function buildBridgeScript(runId: string): string {
       if (val instanceof Set) return 'Set(' + val.size + ') ' + safeFormat(Array.from(val.values()), seen);
       if (Array.isArray(val)) return '[' + val.map((item) => safeFormat(item, seen)).join(', ') + ']';
       try {
-        return JSON.stringify(val, (_k, v) => {
-          if (typeof v === 'object' && v !== null) {
-            if (seen.has(v)) return '[Circular]';
-          }
+        const jsonSeen = new WeakSet();
+        return JSON.stringify(val, (k, v) => {
           if (typeof v === 'function') return '[Function]';
+          if (typeof v === 'object' && v !== null) {
+            if (k !== '' && jsonSeen.has(v)) return '[Circular]';
+            jsonSeen.add(v);
+          }
           return v;
         }, 2);
       } catch {
@@ -303,10 +305,12 @@ export function buildSrcDoc({
       try {
         ${escapeScriptTag(SHARED_TEST_HARNESS_SOURCE)}
         ${reactScopePrelude}
-        ${escapeScriptTag(compiledCode)}
-        ${reactAutoMount}
-        ${testExecutionBlock}
-        ${defaultNonReactHint}
+        await (async function() {
+          ${escapeScriptTag(compiledCode)}
+          ${reactAutoMount}
+          ${testExecutionBlock}
+          ${defaultNonReactHint}
+        })();
       } catch (err) {
         window.__SANDBOX_SEND__({
           type: 'sandbox-error',

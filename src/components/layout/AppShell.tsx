@@ -49,7 +49,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <span className="hidden sm:inline">System Design Studio</span>
             </Link>
 
-            <nav aria-label="Primary navigation" className="hidden items-center gap-1 md:flex">
+            <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
               {navItems.map((item) => {
                 const active = item.match(location.pathname);
                 const Icon = item.icon;
@@ -138,7 +138,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     type="button"
                     variant="outline"
                     size="icon-sm"
-                    className="md:hidden"
+                    className="lg:hidden"
                     aria-label="Open navigation menu"
                   />
                 }
