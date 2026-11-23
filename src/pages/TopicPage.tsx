@@ -299,7 +299,7 @@ export default function TopicPage() {
               variant="outline"
               size="sm"
               render={<Link to={`/topic/${prevTopic.categoryId}/${prevTopic.id}`} />}
-              className="gap-1.5 text-xs"
+              className="h-auto max-w-full gap-1.5 py-1.5 whitespace-normal text-left text-xs"
             >
               <ArrowLeft className="size-3.5" />
               <span>{t(UI_STRINGS.topic.prevTopic, locale)}: {prevTopic.shortTitle}</span>
@@ -313,7 +313,7 @@ export default function TopicPage() {
               variant="outline"
               size="sm"
               render={<Link to={`/topic/${nextTopic.categoryId}/${nextTopic.id}`} />}
-              className="gap-1.5 text-xs"
+              className="h-auto max-w-full gap-1.5 py-1.5 whitespace-normal text-left text-xs"
             >
               <span>{t(UI_STRINGS.topic.nextTopic, locale)}: {nextTopic.shortTitle}</span>
               <ArrowRight className="size-3.5" />

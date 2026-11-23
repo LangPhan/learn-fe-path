@@ -143,7 +143,7 @@ export function TopicTheoryView({ topic, onOpenChallenge }: TopicTheoryViewProps
                   key={relId}
                   variant="outline"
                   render={<Link to={`/topic/${meta.categoryId}/${meta.id}`} />}
-                  className="cursor-pointer hover:border-primary hover:text-primary"
+                  className="h-auto max-w-full cursor-pointer whitespace-normal break-words py-1 text-left leading-snug hover:border-primary hover:text-primary"
                 >
                   {meta.shortTitle}
                 </Badge>
