@@ -1,0 +1,40 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+.pnp
+.pnp.*
+
+# Installed agent skills (restored via skills-lock.json)
+.agents/
+
+# Build artifacts
+dist
+dist-ssr
+*.local
+.vite
+
+# Generated sandbox bundle (rebuilt automatically via build:sandbox)
+# Note: keep or ignore? Let's keep generated/ or ignore? Wait: if someone runs tsc right after clone, having build:sandbox generate it OR tracking it is helpful; wait - in plan: "verify git status clean .gitignore (ignoring node_modules, dist, .vite)". Let's keep scripts generating src/sandbox/generated/reactRuntime.ts cleanly.
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Test coverage
+coverage
