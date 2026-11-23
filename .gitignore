@@ -20,6 +20,7 @@ dist
 dist-ssr
 *.local
 .vite
+.vercel
 
 # Generated sandbox bundle (rebuilt automatically via build:sandbox)
 # Note: keep or ignore? Let's keep generated/ or ignore? Wait: if someone runs tsc right after clone, having build:sandbox generate it OR tracking it is helpful; wait - in plan: "verify git status clean .gitignore (ignoring node_modules, dist, .vite)". Let's keep scripts generating src/sandbox/generated/reactRuntime.ts cleanly.
