@@ -25,8 +25,8 @@ export const UI_STRINGS = {
       en: 'Front End System Design — 86 Core Skills',
     },
     subheading: {
-      vi: '14 nhóm kiến thức từ ảnh hệ thống chuẩn phỏng vấn: lý thuyết súc tích, 17 mô phỏng trực quan, 38 bài test code tự động và sandbox chạy offline.',
-      en: '14 core categories from the interview cheatsheet: concise theory, 17 interactive labs, 38 unit-tested coding challenges, and an offline code sandbox.',
+      vi: '14 nhóm kiến thức từ ảnh hệ thống chuẩn phỏng vấn: lý thuyết súc tích, 17 mô phỏng trực quan, 37 bài test code tự động và sandbox chạy offline.',
+      en: '14 core categories from the interview cheatsheet: concise theory, 17 interactive labs, 37 unit-tested coding challenges, and an offline code sandbox.',
     },
     masteredLabel: { vi: 'Đã thành thạo', en: 'Mastered' },
     inProgressLabel: { vi: 'Đang học', en: 'In progress' },
@@ -188,8 +188,8 @@ export const UI_STRINGS = {
   },
   command: {
     placeholder: {
-      vi: 'Tìm trong 86 kỹ năng, 17 labs, 38 challenges, 6 case study...',
-      en: 'Search 86 skills, 17 labs, 38 challenges, 6 case studies...',
+      vi: 'Tìm trong 86 kỹ năng, 17 labs, 37 challenges, 6 case study...',
+      en: 'Search 86 skills, 17 labs, 37 challenges, 6 case studies...',
     },
     empty: { vi: 'Không tìm thấy kết quả phù hợp.', en: 'No matching results found.' },
     groups: {
