@@ -35,7 +35,8 @@ export function SandboxPreview({
   iframeHeight = '280px',
   className,
 }: SandboxPreviewProps) {
-  const { locale } = useApp();
+  const { locale, theme } = useApp();
+  const [prevRunId, setPrevRunId] = useState(runId);
   const [internalTab, setInternalTab] = useState<'preview' | 'console' | 'tests'>(
     hasTests ? 'tests' : mode === 'js' || mode === 'ts' ? 'console' : 'preview',
   );
@@ -44,18 +45,19 @@ export function SandboxPreview({
   const [testResults, setTestResults] = useState<TestCaseResult[] | null>(null);
   const [durationMs, setDurationMs] = useState<number | null>(null);
 
+  if (prevRunId !== runId) {
+    setPrevRunId(runId);
+    setLogs([]);
+    setRuntimeError(null);
+    setTestResults(null);
+    setDurationMs(null);
+  }
+
   const activeTab = controlledTab ?? internalTab;
   const setActiveTab = (next: 'preview' | 'console' | 'tests') => {
     setInternalTab(next);
     onTabChange?.(next);
   };
-
-  useEffect(() => {
-    setLogs([]);
-    setRuntimeError(null);
-    setTestResults(null);
-    setDurationMs(null);
-  }, [runId]);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -186,14 +188,25 @@ export function SandboxPreview({
               Fix compilation error above to render preview.
             </div>
           ) : (
-            <iframe
-              key={runId}
-              title="Live Code Sandbox Preview"
-              sandbox="allow-scripts"
-              srcDoc={srcDoc}
-              className="w-full border-0 bg-background"
-              style={{ height: iframeHeight }}
-            />
+            <div
+              className="w-full"
+              style={{
+                height: iframeHeight,
+                backgroundColor: theme === 'dark' ? '#0d1118' : '#ffffff',
+                colorScheme: theme,
+              }}
+            >
+              <iframe
+                title="Live Code Sandbox Preview"
+                sandbox="allow-scripts"
+                srcDoc={srcDoc}
+                className="block h-full w-full border-0"
+                style={{
+                  backgroundColor: theme === 'dark' ? '#0d1118' : '#ffffff',
+                  colorScheme: theme,
+                }}
+              />
+            </div>
           )}
         </TabsContent>
 

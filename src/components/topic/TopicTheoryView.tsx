@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TOPIC_META_MAP } from '@/data/topicIndex';
+import { prefetchCategory } from '@/data/loader';
 import { useApp } from '@/contexts/AppContext';
 import { UI_STRINGS, t } from '@/i18n/translations';
 import type { TopicContent } from '@/types/curriculum';
@@ -143,6 +144,8 @@ export function TopicTheoryView({ topic, onOpenChallenge }: TopicTheoryViewProps
                   key={relId}
                   variant="outline"
                   render={<Link to={`/topic/${meta.categoryId}/${meta.id}`} />}
+                  onMouseEnter={() => prefetchCategory(meta.categoryId)}
+                  onFocus={() => prefetchCategory(meta.categoryId)}
                   className="h-auto max-w-full cursor-pointer whitespace-normal break-words py-1 text-left leading-snug hover:border-primary hover:text-primary"
                 >
                   {meta.shortTitle}

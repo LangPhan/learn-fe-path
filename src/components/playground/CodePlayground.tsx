@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   Check,
   Copy,
@@ -39,6 +39,7 @@ import { cn } from '@/lib/utils';
 import type { CodingChallenge, SandboxMode, TestCaseResult, TopicExample } from '@/types/curriculum';
 
 export interface CodePlaygroundProps {
+  topicId?: string;
   example?: TopicExample;
   challenge?: CodingChallenge;
   initialMode?: 'example' | 'challenge';
@@ -48,6 +49,7 @@ export interface CodePlaygroundProps {
 }
 
 export function CodePlayground({
+  topicId,
   example,
   challenge,
   initialMode = 'example',
@@ -60,16 +62,20 @@ export function CodePlayground({
   const effectiveMode: 'example' | 'challenge' =
     initialMode === 'challenge' && challenge ? 'challenge' : example ? 'example' : 'challenge';
 
+  const modeSyncKey = `${topicId ?? ''}:${example?.title.en ?? ''}:${challenge?.id ?? ''}:${effectiveMode}`;
+  const [prevModeSyncKey, setPrevModeSyncKey] = useState(modeSyncKey);
   const [playgroundTab, setPlaygroundTab] = useState<'example' | 'challenge'>(effectiveMode);
 
-  useEffect(() => {
+  const activePlaygroundTab = prevModeSyncKey !== modeSyncKey ? effectiveMode : playgroundTab;
+  if (prevModeSyncKey !== modeSyncKey) {
+    setPrevModeSyncKey(modeSyncKey);
     setPlaygroundTab(effectiveMode);
-  }, [effectiveMode, example?.code, challenge?.id]);
+  }
 
   const activeSource = useMemo(() => {
-    if (playgroundTab === 'challenge' && challenge) {
+    if (activePlaygroundTab === 'challenge' && challenge) {
       return {
-        key: `challenge-${challenge.id}`,
+        key: `challenge-${topicId ?? ''}-${challenge.id}`,
         code: challenge.starterCode,
         css: '',
         mode: 'ts' as SandboxMode,
@@ -78,15 +84,22 @@ export function CodePlayground({
       };
     }
     return {
-      key: `example-${example?.title.en ?? 'default'}`,
+      key: `example-${topicId ?? ''}-${example?.title.en ?? 'default'}`,
       code: example?.code ?? '',
       css: example?.css ?? '',
       mode: example?.mode ?? ('ts' as SandboxMode),
       testCode: undefined,
       isChallenge: false,
     };
-  }, [playgroundTab, challenge, example]);
+  }, [activePlaygroundTab, topicId, challenge, example]);
 
+  const initialPreviewTab: 'preview' | 'console' | 'tests' = activeSource.isChallenge
+    ? 'tests'
+    : activeSource.mode === 'js' || activeSource.mode === 'ts'
+      ? 'console'
+      : 'preview';
+
+  const [prevSourceKey, setPrevSourceKey] = useState(activeSource.key);
   const [code, setCode] = useState(activeSource.code);
   const [cssCode, setCssCode] = useState(activeSource.css);
   const [codeLayerTab, setCodeLayerTab] = useState<'main' | 'css'>('main');
@@ -97,47 +110,35 @@ export function CodePlayground({
     css: string;
     mode: SandboxMode;
     testCode?: string;
-  }>({
+  }>(() => ({
     runId: `run-${Date.now()}-1`,
     code: activeSource.code,
     css: activeSource.css,
     mode: activeSource.mode,
-    testCode: activeSource.isChallenge ? undefined : undefined,
-  });
+    testCode: activeSource.isChallenge ? activeSource.testCode : undefined,
+  }));
 
-  const [previewTab, setPreviewTab] = useState<'preview' | 'console' | 'tests'>(
-    activeSource.isChallenge
-      ? 'tests'
-      : activeSource.mode === 'js' || activeSource.mode === 'ts'
-        ? 'console'
-        : 'preview',
-  );
+  const [previewTab, setPreviewTab] = useState<'preview' | 'console' | 'tests'>(initialPreviewTab);
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [confirmSolutionOpen, setConfirmSolutionOpen] = useState(false);
 
-  // Sync editor when switching topic, example, or challenge tab
-  useEffect(() => {
+  if (prevSourceKey !== activeSource.key) {
+    setPrevSourceKey(activeSource.key);
     setCode(activeSource.code);
     setCssCode(activeSource.css);
     setCodeLayerTab('main');
-    const nextRunId = `run-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    const nextRun = runCounter + 1;
+    setRunCounter(nextRun);
     setExecutedPayload({
-      runId: nextRunId,
+      runId: `run-${Date.now()}-${nextRun}`,
       code: activeSource.code,
       css: activeSource.css,
       mode: activeSource.mode,
-      // Auto-run examples immediately; wait for click or run in challenge mode so user can inspect starter
       testCode: activeSource.isChallenge ? activeSource.testCode : undefined,
     });
-    setPreviewTab(
-      activeSource.isChallenge
-        ? 'tests'
-        : activeSource.mode === 'js' || activeSource.mode === 'ts'
-          ? 'console'
-          : 'preview',
-    );
-  }, [activeSource]);
+    setPreviewTab(initialPreviewTab);
+  }
 
   const handleRun = useCallback(() => {
     const nextCount = runCounter + 1;
@@ -253,7 +254,7 @@ export function CodePlayground({
         <div className="flex flex-wrap items-center gap-2">
           {example && challenge ? (
             <Tabs
-              value={playgroundTab}
+              value={activePlaygroundTab}
               onValueChange={(v) => {
                 if (v === 'example' || v === 'challenge') setPlaygroundTab(v);
               }}
@@ -291,7 +292,7 @@ export function CodePlayground({
             </div>
           )}
 
-          {example?.css && playgroundTab === 'example' && (
+          {example?.css && activePlaygroundTab === 'example' && (
             <Tabs value={codeLayerTab} onValueChange={(v) => setCodeLayerTab(v === 'css' ? 'css' : 'main')}>
               <TabsList className="h-7">
                 <TabsTrigger value="main" className="font-mono text-[11px] uppercase">
@@ -342,7 +343,7 @@ export function CodePlayground({
       </div>
 
       {/* Contextual guidance */}
-      {playgroundTab === 'example' && example && (
+      {activePlaygroundTab === 'example' && example && (
         <div className="rounded-md border border-border/70 bg-muted/30 px-3 py-2 text-xs">
           <p className="text-foreground/90">{t(example.description, locale)}</p>
           <p className="mt-1 text-muted-foreground">
@@ -352,7 +353,7 @@ export function CodePlayground({
         </div>
       )}
 
-      {playgroundTab === 'challenge' && challenge && (
+      {activePlaygroundTab === 'challenge' && challenge && (
         <div className="rounded-md border border-border/70 bg-muted/30 px-3 py-2 text-xs">
           <p className="leading-relaxed text-foreground/95">{t(challenge.prompt, locale)}</p>
         </div>

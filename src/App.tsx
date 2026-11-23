@@ -13,7 +13,7 @@ const QuizArenaPage = lazy(() => import('@/pages/QuizArenaPage'));
 
 function PageFallback() {
   return (
-    <div className="mx-auto max-w-[1440px] px-4 py-12 text-center text-sm text-muted-foreground sm:px-6 lg:px-8">
+    <div className="mx-auto min-h-[70vh] max-w-[1440px] px-4 py-12 text-center text-sm text-muted-foreground sm:px-6 lg:px-8">
       Loading studio module...
     </div>
   );

@@ -28,6 +28,15 @@ export async function loadCategoryTopics(categoryId: CategoryId): Promise<TopicC
   return topics;
 }
 
+export function getCachedTopic(categoryId: CategoryId, topicId: string): TopicContent | undefined {
+  return categoryCache.get(categoryId)?.find((t) => t.id === topicId);
+}
+
+export function prefetchCategory(categoryId: CategoryId): void {
+  if (categoryCache.has(categoryId)) return;
+  void loadCategoryTopics(categoryId);
+}
+
 export async function loadTopic(categoryId: CategoryId, topicId: string): Promise<TopicContent | undefined> {
   const topics = await loadCategoryTopics(categoryId);
   return topics.find((t) => t.id === topicId);

@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, ChevronDown, ChevronRight, Circle } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CATEGORIES } from '@/data/categories';
 import { TOPIC_INDEX } from '@/data/topicIndex';
+import { prefetchCategory } from '@/data/loader';
 import { useApp } from '@/contexts/AppContext';
 import { t } from '@/i18n/translations';
 import { cn } from '@/lib/utils';
@@ -27,6 +28,10 @@ export function TopicSidebar({
     [activeCategoryId]: true,
   });
 
+  useEffect(() => {
+    setOpenCategories((prev) => (prev[activeCategoryId] ? prev : { ...prev, [activeCategoryId]: true }));
+  }, [activeCategoryId]);
+
   const toggleCat = (id: string) => {
     setOpenCategories((prev) => ({ ...prev, [id]: !(prev[id] ?? id === activeCategoryId) }));
   };
@@ -41,7 +46,11 @@ export function TopicSidebar({
 
           return (
             <Collapsible key={cat.id} open={isOpen} onOpenChange={() => toggleCat(cat.id)}>
-              <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 rounded-md px-2 py-1.5 text-left text-xs font-semibold hover:bg-muted/60">
+              <CollapsibleTrigger
+                onMouseEnter={() => prefetchCategory(cat.id)}
+                onFocus={() => prefetchCategory(cat.id)}
+                className="flex w-full items-center justify-between gap-2 rounded-md px-2 py-1.5 text-left text-xs font-semibold hover:bg-muted/60"
+              >
                 <span className="flex min-w-0 items-center gap-2">
                   {isOpen ? (
                     <ChevronDown className="size-3.5 shrink-0 text-muted-foreground" />
@@ -68,6 +77,8 @@ export function TopicSidebar({
                       <li key={topic.id}>
                         <Link
                           to={`/topic/${cat.id}/${topic.id}`}
+                          onMouseEnter={() => prefetchCategory(cat.id)}
+                          onFocus={() => prefetchCategory(cat.id)}
                           onClick={onNavigate}
                           className={cn(
                             'flex items-start gap-2 rounded-md px-2 py-1.5 text-xs transition-colors',

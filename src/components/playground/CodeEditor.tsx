@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
@@ -34,6 +34,9 @@ export function CodeEditor({
   readOnly = false,
   ariaLabel = 'Code editor',
 }: CodeEditorProps) {
+  const onRunShortcutRef = useRef(onRunShortcut);
+  onRunShortcutRef.current = onRunShortcut;
+
   const extensions = useMemo(() => {
     const langExt =
       mode === 'html'
@@ -50,7 +53,7 @@ export function CodeEditor({
         {
           key: 'Mod-Enter',
           run: () => {
-            onRunShortcut?.();
+            onRunShortcutRef.current?.();
             return true;
           },
         },
@@ -73,12 +76,13 @@ export function CodeEditor({
     });
 
     return [langExt, shortcutExt, fontTheme, EditorView.lineWrapping];
-  }, [mode, fontSize, onRunShortcut]);
+  }, [mode, fontSize]);
 
   return (
     <div
       data-slot="code-editor"
       data-theme={theme}
+      style={{ minHeight: height }}
       className={cn(
         'relative overflow-hidden rounded-md border border-border bg-card text-card-foreground',
         className,

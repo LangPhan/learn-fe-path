@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CATEGORIES, CATEGORY_MAP } from '@/data/categories';
 import { TOPIC_INDEX, TOPIC_META_MAP } from '@/data/topicIndex';
-import { loadAllTopics } from '@/data/loader';
+import { getCachedTopic, loadAllTopics, loadCategoryTopics } from '@/data/loader';
 import { SCENARIO_INDEX } from '@/data/scenarioIndex';
 import { SCENARIOS } from '@/data/scenarios';
 import { VALID_VISUALIZER_IDS } from '@/components/visualizers/VisualizerRegistry';
@@ -137,5 +137,13 @@ describe('Curriculum Integrity & Completeness', () => {
         ).toBeDefined();
       }
     }
+  });
+
+  it('serves cached topics synchronously once a category module has been loaded', async () => {
+    await loadCategoryTopics('architecture');
+    const cached = getCachedTopic('architecture', 'ssr');
+    expect(cached).toBeDefined();
+    expect(cached?.id).toBe('ssr');
+    expect(cached?.categoryId).toBe('architecture');
   });
 });

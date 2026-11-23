@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/dialog';
 import { CATEGORIES } from '@/data/categories';
 import { TOPIC_INDEX, TOPIC_META_MAP } from '@/data/topicIndex';
-import { loadAllChallenges } from '@/data/loader';
+import { loadAllChallenges, prefetchCategory } from '@/data/loader';
 import { useApp } from '@/contexts/AppContext';
 import { UI_STRINGS, t } from '@/i18n/translations';
 import type { CategoryMeta, TopicMeta } from '@/types/curriculum';
@@ -274,6 +274,8 @@ export default function HomePage() {
                           <li key={topic.id}>
                             <Link
                               to={`/topic/${cat.id}/${topic.id}`}
+                              onMouseEnter={() => prefetchCategory(cat.id)}
+                              onFocus={() => prefetchCategory(cat.id)}
                               className="group flex items-start justify-between gap-2 rounded-md border border-transparent px-2 py-1.5 text-sm transition-all duration-150 hover:-translate-y-px hover:border-border hover:bg-muted/50"
                             >
                               <div className="flex min-w-0 items-start gap-2">
