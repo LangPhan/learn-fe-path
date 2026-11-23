@@ -809,7 +809,7 @@ export const TOPIC_INDEX: TopicMeta[] = [
     tags: ['overflow', 'truncate', 'line-clamp', 'css'],
     visualizerId: 'ui-states',
     hasChallenge: true,
-    sandboxMode: 'ts',
+    sandboxMode: 'html',
   },
   {
     id: 'mobile-friendliness',
@@ -909,7 +909,7 @@ export const TOPIC_INDEX: TopicMeta[] = [
     tags: ['rtl', 'bidi', 'logical-properties', 'css'],
     visualizerId: 'i18n-playground',
     hasChallenge: false,
-    sandboxMode: 'html',
+    sandboxMode: 'react',
   },
   {
     id: 'template-strings',
@@ -945,7 +945,7 @@ export const TOPIC_INDEX: TopicMeta[] = [
     tags: ['i18n', 'html-overlay', 'a11y', 'localization'],
     visualizerId: 'i18n-playground',
     hasChallenge: false,
-    sandboxMode: 'html',
+    sandboxMode: 'react',
   },
   {
     id: 'ime',

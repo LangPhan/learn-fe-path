@@ -8,8 +8,8 @@
     "skipLibCheck": true,
 
     "moduleResolution": "bundler",
-    "allowImportingTextExtensions": false,
     "allowImportingTsExtensions": true,
+    "types": ["vite/client"],
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,

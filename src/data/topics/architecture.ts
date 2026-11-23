@@ -170,6 +170,7 @@ test('neutralizes </script> breakout inside dehydrated JSON state', () => {
       ],
       whenToAvoid: [
         { vi: 'Landing page, blog, thương mại điện tử cần SEO và thời gian hiển thị đầu tiên < 1.5s trên mạng 3G.', en: 'Public marketing, blogs, and e-commerce sites requiring strong SEO and fast initial load on 3G.' },
+        { vi: 'Trang hướng tới thiết bị cấu hình thấp hoặc link share cần Open Graph preview cho mạng xã hội.', en: 'Content shared on social feeds needing crawler-readable Open Graph tags and low CPU overhead.' },
       ],
     },
     pitfalls: [
@@ -178,6 +179,7 @@ test('neutralizes </script> breakout inside dehydrated JSON state', () => {
     ],
     interviewTips: [
       { vi: 'Chỉ ra cách khắc phục nhược điểm CSR: route-based code splitting + prefetching data song song ở router loader thay vì chờ component mount.', en: 'Explain how to fix CSR waterfalls: route-level code splitting plus router loaders fetching data in parallel with chunk loads.' },
+      { vi: 'Nhấn mạnh tách biệt CSR App Shell với marketing pages (dùng SSG/SSR) để vừa đạt SEO tốt vừa giữ trải nghiệm SPA mượt sau login.', en: 'Recommend pairing SSG/SSR marketing routes with a CSR app shell behind authentication for the best of both worlds.' },
     ],
     example: {
       title: { vi: 'Mô phỏng CSR Boot Lifecycle & Waterfall', en: 'Interactive CSR Boot Waterfall Demo' },

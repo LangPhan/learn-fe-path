@@ -28,7 +28,6 @@ import { TOPIC_INDEX, TOPIC_META_MAP } from '@/data/topicIndex';
 import { loadAllChallenges } from '@/data/loader';
 import { useApp } from '@/contexts/AppContext';
 import { UI_STRINGS, t } from '@/i18n/translations';
-import { cn } from '@/lib/utils';
 import type { CategoryMeta, TopicMeta } from '@/types/curriculum';
 
 type FilterMode = 'all' | 'not_started' | 'in_progress' | 'mastered' | 'has_lab' | 'has_challenge' | 'bookmarked';
