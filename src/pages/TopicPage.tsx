@@ -118,12 +118,46 @@ export default function TopicPage() {
   const hasVisualizer = Boolean(meta.visualizerId);
   const resolvedTab = activeTab === 'lab' && !hasVisualizer ? 'learn' : activeTab;
 
+  const prevNextNav = (
+    <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-4">
+      {prevTopic ? (
+        <Button
+          variant="outline"
+          size="sm"
+          render={<Link to={`/topic/${prevTopic.categoryId}/${prevTopic.id}`} />}
+          onMouseEnter={() => prefetchCategory(prevTopic.categoryId)}
+          onFocus={() => prefetchCategory(prevTopic.categoryId)}
+          className="h-auto max-w-full gap-1.5 py-1.5 whitespace-normal text-left text-xs"
+        >
+          <ArrowLeft className="size-3.5 shrink-0" />
+          <span>{t(UI_STRINGS.topic.prevTopic, locale)}: {prevTopic.shortTitle}</span>
+        </Button>
+      ) : (
+        <div />
+      )}
+
+      {nextTopic && (
+        <Button
+          variant="outline"
+          size="sm"
+          render={<Link to={`/topic/${nextTopic.categoryId}/${nextTopic.id}`} />}
+          onMouseEnter={() => prefetchCategory(nextTopic.categoryId)}
+          onFocus={() => prefetchCategory(nextTopic.categoryId)}
+          className="h-auto max-w-full gap-1.5 py-1.5 whitespace-normal text-left text-xs"
+        >
+          <span>{t(UI_STRINGS.topic.nextTopic, locale)}: {nextTopic.shortTitle}</span>
+          <ArrowRight className="size-3.5 shrink-0" />
+        </Button>
+      )}
+    </div>
+  );
+
   return (
-    <div className="mx-auto flex max-w-[1440px] gap-5 px-4 py-5 sm:px-6 lg:px-8">
+    <div className="mx-auto flex max-w-[1440px] gap-5 px-4 py-4 sm:px-6 lg:px-8">
       {/* Desktop collapsible sidebar */}
       {sidebarOpen && (
-        <aside className="hidden w-64 shrink-0 rounded-xl border border-border bg-card p-3 lg:block lg:h-[calc(100vh-5.5rem)] lg:sticky lg:top-18">
-          <div className="mb-2 flex items-center justify-between border-b border-border pb-2 text-xs font-semibold">
+        <aside className="hidden w-64 shrink-0 flex-col overflow-hidden rounded-xl border border-border bg-card p-3 lg:sticky lg:top-[4.5rem] lg:flex lg:h-[calc(100dvh-5.5rem)] lg:self-start">
+          <div className="mb-2 flex shrink-0 items-center justify-between border-b border-border pb-2 text-xs font-semibold">
             <span>{t(UI_STRINGS.topic.allTopics, locale)}</span>
             <Button
               type="button"
@@ -138,7 +172,7 @@ export default function TopicPage() {
           <TopicSidebar
             activeCategoryId={category.id}
             activeTopicId={meta.id}
-            className="h-[calc(100%-2.5rem)]"
+            className="min-h-0 flex-1"
           />
         </aside>
       )}
@@ -245,14 +279,17 @@ export default function TopicPage() {
         {/* Split-Screen Workspace on Desktop / Unified on Mobile */}
         {!displayTopic ? (
           <div className="grid gap-5 xl:grid-cols-12" aria-busy="true" aria-label="Loading skill details">
-            <div className="min-w-0 space-y-4 xl:col-span-6">
-              <div className="h-9 w-full rounded-lg bg-muted/60" />
-              <div className="h-28 rounded-lg border border-border bg-card/70" />
-              <div className="h-64 rounded-lg border border-border bg-card/70" />
-              <div className="h-44 rounded-lg border border-border bg-card/70" />
+            <div className="min-w-0 space-y-5 xl:col-span-6">
+              <div className="space-y-4">
+                <div className="h-9 w-full rounded-lg bg-muted/60" />
+                <div className="h-28 rounded-lg border border-border bg-card/70" />
+                <div className="h-64 rounded-lg border border-border bg-card/70" />
+                <div className="h-44 rounded-lg border border-border bg-card/70" />
+              </div>
+              {prevNextNav}
             </div>
             <div className="hidden min-w-0 xl:col-span-6 xl:block">
-              <div className="h-[640px] rounded-lg border border-border bg-card/70" />
+              <div className="sticky top-[4.5rem] h-[640px] max-h-[calc(100dvh-5.5rem)] rounded-lg border border-border bg-card/70" />
             </div>
           </div>
         ) : (
@@ -263,7 +300,7 @@ export default function TopicPage() {
             )}
           >
             {/* Left Pane: Theory / Lab / Quiz / Notes (+ Mobile Live Code tab) */}
-            <div className="min-w-0 xl:col-span-6">
+            <div className="min-w-0 space-y-5 xl:col-span-6">
               <Tabs value={resolvedTab} onValueChange={setActiveTab} className="space-y-4">
                 <TabsList className="h-auto w-full flex-wrap justify-start gap-1">
                   <TabsTrigger value="learn" className="gap-1.5 text-xs">
@@ -327,56 +364,25 @@ export default function TopicPage() {
                   />
                 </TabsContent>
               </Tabs>
+
+              {prevNextNav}
             </div>
 
             {/* Right Pane: Persistent Live Code Playground on Desktop */}
             <div className="hidden min-w-0 xl:col-span-6 xl:block">
-              <div className="sticky top-18">
+              <div className="sticky top-[4.5rem] max-h-[calc(100dvh-5.5rem)] overflow-y-auto overscroll-contain rounded-lg">
                 <CodePlayground
                   topicId={displayTopic.id}
                   example={displayTopic.example}
                   challenge={displayTopic.challenge}
                   initialMode={playgroundMode}
-                  editorHeight="300px"
-                  previewHeight="250px"
+                  editorHeight="260px"
+                  previewHeight="230px"
                 />
               </div>
             </div>
           </div>
         )}
-
-        {/* Bottom Prev / Next Navigation */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-4">
-          {prevTopic ? (
-            <Button
-              variant="outline"
-              size="sm"
-              render={<Link to={`/topic/${prevTopic.categoryId}/${prevTopic.id}`} />}
-              onMouseEnter={() => prefetchCategory(prevTopic.categoryId)}
-              onFocus={() => prefetchCategory(prevTopic.categoryId)}
-              className="h-auto max-w-full gap-1.5 py-1.5 whitespace-normal text-left text-xs"
-            >
-              <ArrowLeft className="size-3.5 shrink-0" />
-              <span>{t(UI_STRINGS.topic.prevTopic, locale)}: {prevTopic.shortTitle}</span>
-            </Button>
-          ) : (
-            <div />
-          )}
-
-          {nextTopic && (
-            <Button
-              variant="outline"
-              size="sm"
-              render={<Link to={`/topic/${nextTopic.categoryId}/${nextTopic.id}`} />}
-              onMouseEnter={() => prefetchCategory(nextTopic.categoryId)}
-              onFocus={() => prefetchCategory(nextTopic.categoryId)}
-              className="h-auto max-w-full gap-1.5 py-1.5 whitespace-normal text-left text-xs"
-            >
-              <span>{t(UI_STRINGS.topic.nextTopic, locale)}: {nextTopic.shortTitle}</span>
-              <ArrowRight className="size-3.5 shrink-0" />
-            </Button>
-          )}
-        </div>
       </div>
     </div>
   );

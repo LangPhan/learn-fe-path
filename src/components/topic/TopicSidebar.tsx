@@ -37,7 +37,7 @@ export function TopicSidebar({
   };
 
   return (
-    <ScrollArea data-slot="topic-sidebar" className={cn('h-full pr-2', className)}>
+    <ScrollArea data-slot="topic-sidebar" className={cn('min-h-0 pr-2', className)}>
       <div className="space-y-1.5 py-2">
         {CATEGORIES.map((cat) => {
           const topics = TOPIC_INDEX.filter((item) => item.categoryId === cat.id);
