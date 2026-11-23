@@ -116,8 +116,23 @@ export function buildSrcDoc({
       --border: ${isDark ? 'rgba(255,255,255,0.12)' : 'rgba(15,23,42,0.12)'};
       --muted: ${isDark ? '#94a3b8' : '#475569'};
       --accent: ${isDark ? '#38bdf8' : '#0369a1'};
+      --scrollbar-thumb: ${isDark ? 'rgba(255,255,255,0.18)' : 'rgba(15,23,42,0.2)'};
+      --scrollbar-thumb-hover: ${isDark ? 'rgba(255,255,255,0.34)' : 'rgba(15,23,42,0.38)'};
     }
     *, *::before, *::after { box-sizing: border-box; }
+    @supports not selector(::-webkit-scrollbar) {
+      * { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
+    }
+    *::-webkit-scrollbar { width: 6px; height: 6px; }
+    *::-webkit-scrollbar-track, *::-webkit-scrollbar-corner { background: transparent; }
+    *::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-thumb);
+      border-radius: 9999px;
+      border: 1.5px solid transparent;
+      background-clip: content-box;
+    }
+    *::-webkit-scrollbar-thumb:hover { background-color: var(--scrollbar-thumb-hover); }
+    *::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
     body {
       margin: 0;
       padding: 16px;
